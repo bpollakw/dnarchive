@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block head %}
+	<!-- SEQVIEW -->
+	<script src="{{ url_for('static', filename='js/sequence-viewer.bundle.js')}}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/seqviewer.js')}}"></script>
+	<!-- CLIPBOARD -->
+	<script src="{{ url_for('static', filename='js/clipboard.min.js')}}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/clipboard_tooltip.js')}}"></script>
+{% endblock %}
+{% block content %}
+
+		<div class="description">
+		
+		<h3 id="message">{{BsaI|length}} BsaI and {{SapI|length}} SapI restriction site(s) were found.</h3>
+	
+			<div id="seqView" class="seqView"></div>
+			
+			<div id="clipboard">
+				<button id="clipboard_btn" class="button right" data-clipboard-text="">Copy</button>
+				<button id="download_gb_btn" class="button right" onclick="export_GB('{{name}}','{{seqtype}}')">Genbank file</button>
+				<button id="recode_btn" class="button right" onclick="recode('{{name}}','{{seq}}','{{newseq}}', '{{seqtype}}','{{BsaI}}','{{SapI}}')">Recode</button>
+			</div>
+				
+				{% if seqtype == "CDS" %}
+					<select class="selector right" id="selector" class="right" name="Fusion" type="text" onchange="change_overhangs(value);">
+						<option value="N">N-terminal fusion</option>
+						<option value="None" selected>No fusion</option>
+						<option value="C">C-terminal fusion</option>
+					</select>
+				{% elif seqtype == "promoter" %}
+					<select class="selector right" id="selector" class="right" name="Fusion" type="text" onchange="change_overhangs(value);">
+						<option value="P">Promoter</option>
+						<option value="PU" selected>Promoter+5'UTR</option>
+					</select>
+				{% else %}
+					<select class="selector right" id="selector" class="right" name="Fusion" type="text" onchange="change_overhangs(value);">
+						<option value="T">Terminator</option>
+						<option value="UT" selected>3'UTR+Terminator</option>
+					</select>
+				{% endif %}
+	</div>
+		<script>
+			
+		$(function(){
+			var clipboard = new Clipboard('#clipboard_btn');
+			$("#clipboard_btn").mouseleave(function(){
+				$(this).removeClass('tooltipped');
+				$(this).attr('aria-label', '');
+				$(this).attr('text', '');
+			});
+
+			clipboard.on('error', function(e) {
+				showTooltip(e.trigger, fallbackMessage(e.action));
+			});
+//			console.log("{{seqtype}}")
+			BsaI = {{BsaI}};
+			SapI = {{SapI}};
+			seq = "{{seq}}";
+			recoder(seq, "#seqView", "{{name}}"+" - Original");
+			legende("BsaI", "blue");
+			legende("SapI", "green");
+			sites( {{BsaI}}, 6, "blue");
+			sites( {{SapI}}, 7, "green");
+			highlight_sites();
+			add_legend();
+		});
+			
+	</script>
+
+{% endblock %}
+

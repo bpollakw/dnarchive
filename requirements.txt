@@ -1,0 +1,6 @@
+biopython==1.64
+Flask==0.10.1
+Flask-Session==0.3.0
+Jinja2==2.8
+virtualenv==15.0.3
+waitress==0.9.0
