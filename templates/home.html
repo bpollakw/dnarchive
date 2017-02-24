@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-<br /><br /><br /><br /><br /><br />
-<h2 class="description">Here begins: the all powerful & comprehensive DNArchive. Here we will store the code of life for everyone's free and open access and community based curation</h2>
+<h2 class="center">The community curated DNA archive - v0.01 alpha</h2>
 <br /><br />
-<h3 class="description">If you would like to contribute or be part of this project, and you have any coding skills, please <u>do</u> send me a note since I'm in quite a lot of need of help to get this done. Here is my e-mail: <a href="mailto:bp358@cam.ac.uk?Subject=DNArchive">bp358[at]cam[dot]ac[dot]uk</a></h3>
-	
+
+<h3 class="description">Here begins: the all powerful & comprehensive DNArchive. Here we will store DNA sequences  for easy, open-access and community based curation</h3>
+<h3 class="description">If you want help out, you can either <a href="/submit">submit</a> a sequence or help out with the coding, please <u>do</u> send me a note since I'm in quite a lot of need of help to get this done.</h3>
+
+<form id="form" class="query-search-field" action="" method="POST">
+	<input id="search-field" class="text-input query-search-field" type="text"  name="term" value="name">
+	<input id='search-button' class="button" type="submit" value="Find">
+</form>
+
 {% endblock %}

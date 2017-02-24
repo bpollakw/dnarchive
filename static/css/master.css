@@ -31,6 +31,20 @@ input.text-input{
 	outline: 0;
 	border: 1px solid #CCC;
 	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+input.text-input-long{
+	background-color: #fafafa;
+	border-radius: 5px; 
+	outline: 0;
+	border: 1px solid #CCC;
+	font-size: 14px;
+	width: 70%;
+}
+.center{
+	text-align: center;
+	margin: auto;
 }
 
 h1{
@@ -92,10 +106,12 @@ a {
 }
 
 .center-form{
+	position: relative;
 	margin-top: 20px;
 	margin-left: auto;
 	margin-right: auto;
 	width: 70%;
+	
 }
 
 .hidden{
@@ -111,7 +127,8 @@ a {
 
 .big-label{
 	font-size: 16px;
-	margin-bottom: 7px;
+	margin-bottom: 5px;
+	margin-top: 5px;
 }
 
 .button{
@@ -262,4 +279,22 @@ a {
 
 .selector{
 	margin-top:3px;
+}
+
+.sequence-box{
+	position: relative;
+	width: 70%;
+	min-height : 160px;
+	border-radius: 5px;
+	border: 1px solid #CCC; 
+	outline:0;
+	text-align: left;
+	vertical-align: super;
+	overflow-y: scroll;
+	margin-bottom: 5px;
+}
+
+.query-search-field{
+	width: 30%;
+	margin: auto;
 }

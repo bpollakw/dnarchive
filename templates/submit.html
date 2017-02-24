@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="center">Submit sequence to DNArchive</h2><br />
+<h3 class="description">Please fill as much fields as you can, to ensure the quality of the database and search efficacy</h3>
+
+
+		<form id="form" action="" class="center-form" method="POST">
+			<input id="search-field" class="text-input" type="text"  name="name" value="Name"><br />
+			<input id="search-field" class="text-input-long" type="text"  name="alias" value="Alias">
+			
+			<p id="description" class="big-label">Enter DNA sequence</p>
+			<textarea id="sequence" class="sequence-box" name="sequence" type="text">ATGACAGGGCTGCATTCGCTGTCCGATGGATTGCATACATCCGATGGAAAGAAGCCAGATGATGATATAGTCATGGAAGAACGCGAGGGGCCACGACACGGCCGAGTGTACAAAAAGTCTAACTGGACATTGACGGAGCTCCAGGTGCTTCAGACCGCCAAACGTGAGGACCAAGAGAAGCAACTGAAGGCTGACCCCAAGGAAAAGCACAAGTCTGCTGCGGAGCGATGGCAGTGGATAGAAGACTATTGCTGGGATCAGCGCGTCGAGCGAAGCGCACAGCAGTGTAGGGATAGATGGGAAAGGATGTCTGCGGACTTCAAGAAGGTGGGAGATTTTGAAAAACAGGTTCCCAGGGGCGGCACTTCTTACTGGCAGATGACCATAGATGACCGGAAAACCAAGAAATTACCCTCCAATTTTCAGCAAGAAATCTTTCATGCTTTGGGGGAATGGTTTGTCCGGAGTCGTGCTGTAGATCCGAACGACATCGTGATCGACACGTCAGTGCCTTCTCCTTTGCAGGTAAATAATGCCTGCGTCAATTTAGTTAGTAACGGAGACAATTCATCCTCAGAGGAGGGCGAAAGCGATCCTCAAGATGGACCGACTACGTGCAAGAAACGGAAGCTGCCTCCAGGGGTAAATGCGGAAGGAATAGCAGCCATAATTGAGAGGGCGAATATGGCTACTCAGAGGACCATGCTGGAATGTGAGGACAGGAAGGATCGGCGCCACAAGGAAACGCTGGAGGCGAACGAGCGGATCGCTTCCGGTTACATTTCAGCGCTGGTAAGCATAGCAGACGCCCTTCGTCAATTTGCGACAAATAGGGACGACAGAGAGTAA</textarea> 
+			<br \ >
+			<input id="search-field" class="text-input" type="text"  name="features" value="Feature"><br />
+			<input id="search-field" class="text-input-long" type="text"  name="reference" value="Reference">
+			<input id="blast-button" class="button right" type="submit" value="SUBMIT">
+		</form>
+
+{% endblock %}
