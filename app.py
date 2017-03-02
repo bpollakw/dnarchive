@@ -30,8 +30,7 @@ app.debug = True
 
 urlparse.uses_netloc.append("postgres")
 
-partsdb = PartsDB('   postgres://tvusrllhctxxun:97a13d0760c9474886c1416562962de907a55c71d9e4ad808900a7d42de9d43f@ec2-23-21-186-138.compute-1.amazonaws.com:5432/d95spg1g38de45
-', clean = False, Base = Base) 
+partsdb = PartsDB('postgres://tvusrllhctxxun:97a13d0760c9474886c1416562962de907a55c71d9e4ad808900a7d42de9d43f@ec2-23-21-186-138.compute-1.amazonaws.com:5432/d95spg1g38de45', clean = False, Base = Base) 
 # PartsDB('postgresql:///dnarchive', clean = False, Base = Base)
 
 def allowed_file(filename):
