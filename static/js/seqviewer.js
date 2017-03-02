@@ -118,14 +118,17 @@ function draw(canvasName, annotation, sequence, type, name){
 	geneView.scale.font.size = 12;
     geneView.trackBuffer = 10;
 
-	if (sequence.length > 1000){
-		geneView.tick.major.size = Math.ceil(seq.length / 1000) * 250;
+	if(sequence.length > 1000){
+		geneView.tick.major.size = Math.ceil(seq.length / 1000) * 1000;
+		geneView.tick.minor.size = Math.ceil(seq.length / 1000) * 100;
+	}else if(sequence.length <= 5000 && sequence.length > 1000){
+		geneView.tick.major.size = Math.ceil(seq.length / 1000) * 500;
 		geneView.tick.minor.size = Math.ceil(seq.length / 1000) * 50;
 	}else if(sequence.length <= 1000 && sequence.length > 100){
-		geneView.tick.major.size = Math.ceil(seq.length / 100) * 50;
+		geneView.tick.major.size = Math.ceil(seq.length / 100) * 100;
 		geneView.tick.minor.size = Math.ceil(seq.length / 100) * 10;
 	}else{
-		geneView.tick.major.size = Math.ceil(seq.length / 100) * 10;
+		geneView.tick.major.size = Math.ceil(seq.length / 100) * 20;
 		geneView.tick.minor.size = Math.ceil(seq.length / 100) * 2;
 	}
 	
@@ -159,7 +162,7 @@ function draw(canvasName, annotation, sequence, type, name){
 	part.color="white";
 	part.borderColor="black";
    	part.borderWidth = 2;
-	part.name = name+" - "+type;
+	part.name = type+" - "+name;
 
 	
 	for (var i = 0; i < arrayLength; i++) {
