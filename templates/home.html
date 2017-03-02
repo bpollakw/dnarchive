@@ -1,14 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2 class="center">The community curated DNA archive - v0.01 alpha</h2>
-<br /><br />
+<br />
 
-<h3 class="description">Here begins: the all powerful & comprehensive DNArchive. Here we will store DNA sequences  for easy, open-access and community based curation</h3>
-<h3 class="description">If you want help out, you can either <a href="/submit">submit</a> a sequence or help out with the coding, please <u>do</u> send me a note since I'm in quite a lot of need of help to get this done.</h3>
+<h3 class="description">Here begins: the all powerful & comprehensive DNArchive. Here we will store DNA sequences  for easy, open-access and community based curation.</h3>
+<h3 class="description">If you want help out, you can either <a href="/upload">upload a genbank</a> sequence <a href="/submit">submit it manually</a>. Also, you can rate the quality of the accessions so that collectively we curate the database.</h3>
+<br/>
 
-<form id="form" class="query-search-field" action="" method="POST">
-	<input id="search-field" class="text-input query-search-field" type="text"  name="term" value="name">
-	<input id='search-button' class="button" type="submit" value="Find">
+<form id="form" class="search-form" action="" method="POST">
+	<input id="search-field" class="text-input query-search-field" type="text"  name="term" value="">
+	<input id='search-button' class="button left" type="submit" value="Find">
+	<select id="type" class="selector" name="type">
+		<option value="">Sequence type</option>
+		<option value="CDS">Coding sequence</option>
+		<option value="Promoter">Promoter</option>
+		<option value="Terminator">Terminator</option>
+		<option value="Repressor">Repressor</option>
+		<option value="Enhancer">Enhancer</option>
+		<option value="Resistance">Resistance</option>
+		<option value="ORI">ORI</option>
+		<option value="Box">Box</option>
+		<option value="Tag">Tag</option>
+		<option value="Other">Other</option>
+	</select>
 </form>
 
+<div style="clear: both;"><br/><div style="clear: both;"><br/><br/>
 {% endblock %}

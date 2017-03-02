@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block head %}
+	<!-- CHART -->
+	<script src="{{ url_for('static', filename='js/Scribl.1.1.4.1.min.js')}}" type="text/javascript"></script>
+	<!-- SEQVIEW -->
+	<script src="{{ url_for('static', filename='js/sequence-viewer.bundle.js')}}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/seqviewer.js')}}" type="text/javascript"></script>
+	<!-- CLIPBOARD -->
+	<script src="{{ url_for('static', filename='js/clipboard.min.js')}}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/clipboard_tooltip.js')}}" type="text/javascript"></script>
+	<!-- USER INTERACTION -->
+	<script src="{{ url_for('static', filename='js/user_interaction.js')}}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/rating.js')}}" type="text/javascript"></script>
+	<script>
+		seq = "{{data.seq}}";
+		dbid = "{{data.dbid}}";
+		var selectedDBID;
+	</script>
+{% endblock %}
+
+{% block content %}
+
+<h2 class="center">Sequence <a href="/details?dbid={{data.dbid}}">{{data.name}}</a> type - {{data.type}}</h2><br />
+<h3 class="description"><u>Description:</u> {{data.description}}.</h3> 
+<h4 class="description">Features: {% for annotation in annotations %}{{ annotation.label }} {% endfor %}</h4>
+<br />
+
+<label id="voted" class="label alert"></label>
+<div class="rating-container">
+	<ul class="c-rating right"></ul>
+</div>
+<p id="votes" class="votes right">Votes = {{data.votes}}</p>
+<div style="clear: both;"></div>
+<br />
+<div class="gene-details">
+	<div class = "geneStucture">
+		<div class = "geneView" >
+			<canvas id = "geneViewCanvas" width="940px"> </canvas>
+		</div>
+		<div id="seqView" class="seqView"></div>
+		
+		<div id="clipboard" class="buttons">
+			<button id="clipboard_btn" class="button right" data-clipboard-text="">Copy</button>
+			<button id="download_gb_btn" class="button right" onclick="location.href='/export?dbid={{data.dbid}}'">Genbank file{{cdsdbid}}</button>
+			<button id="reset_btn" class="button right" onclick="reset();">Reset colour</button>
+		</div>		
+	</div>
+</div>
+
+<h4 class="description"><u>Reference:</u> {{data.reference}}</h4>
+<br /><br />
+<script>
+	
+	init_rating();
+	$(document).ready(function(){
+		$(".footer").css("position","relative")
+		
+		var clipboard = new Clipboard('#clipboard_btn')
+		$("#clipboard_btn").mouseleave(function(){
+				$(this).removeClass('tooltipped');
+				$(this).attr('aria-label', '');
+		});
+
+		clipboard.on('error', function(e) {
+			showTooltip(e.trigger, fallbackMessage(e.action));
+		});
+
+		clipboard.on('success', function(e) {
+			showTooltip(e.trigger, "Copied to clipboard");
+		});
+		
+		
+		seqviewer(seq, "#seqView");
+
+		{% for annotation in annotations %}
+			parse_annotation("{{annotation.location}}","{{annotation.label}}", "{{annotation.type}}","{{annotation.id}}")
+		{% endfor %}
+		sort_annotations(annotations);
+		highlight_seq(annotations);
+		
+		seqViewer.coverage(sequenceCoverage);
+		seqViewer.addLegend(legend);
+		 
+		draw("geneViewCanvas", annotations, seq, '{{data.type}}', '{{data.name}}');
+		 
+		
+		 
+	});
+		 
+	function init_rating(){
+	  	var ratingElement = document.querySelector('.c-rating');
+		var currentRating = '{{score|round(0,'common')}}';
+		var maxRating= 5;
+		if ('{{voted}}' == 'True'){
+			var callback = function(rating) {
+				$('#voted').html("Sorry, you've already voted for this entry"); 
+			};
+		}else{
+			var callback = function(rating) {
+				$('#voted').html("Thanks! Your vote has been cast"); 
+				vote(rating); 
+			};
+		}
+		
+		var myRating = rating(ratingElement, currentRating, maxRating, callback);	
+	}
+	
+	function reset(){
+		seqViewer.coverage(sequenceCoverage);
+		selectedDBID='';
+		draworig();
+	};	
+</script>
+
+{% endblock %}

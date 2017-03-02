@@ -1,151 +1,261 @@
-function recoder(sequence, element, name) {
+var typeColors = {		'1'		: 'rgb(50, 50, 0)',
+						'2'		: 'rgb(50, 0, 0)',
+						'3'		: 'rgb(0, 50, 75)',
+						'4'		: 'rgb(0, 50, 0)',
+						'5'		: 'rgb(0, 50, 75)'
+};
+
+var typeColorsSelected = {	'0'		: 'rgb(230, 230, 120)',
+							'1'		: 'rgb(255, 255, 50)',
+							'2'		: 'rgb(250, 0, 50)',
+							'3'		: 'rgb(0, 200, 250)',
+							'4'		: 'rgb(0, 200, 100)',
+							'5'		: 'rgb(200, 80, 80)',
+						  	'6'		: 'rgb(50, 150, 200)',
+						  	'7'		: 'rgb(100, 240, 50)',
+						  	'8'		: 'rgb(255, 180, 100)',
+						  	'9'		: 'rgb(150, 150, 200)'
+};
+
+sequenceCoverage = [];
+legend = [];
+annotations = [];
+var features = []
+
+
+function parse_annotation(location, label, type, id){
+	var res = location.split(";");
+	var id = id;
+	var loc = res[0];
+	var pos = loc.split(":");
+	var strand = Number(res[1]);
+	
+	if (strand == 1){
+			strand = '+'
+		}else if(strand == -1){
+			strand = '-'
+		}else{
+		}
+	
+	var start = Number(pos[0]);
+	var end = Number(pos[1]);
+	var label = label;
+	
+	annotations.push({label: label, start: start, end: end, strand: strand,id: id, type: type})
+}
+
+function sort_annotations(annotations){
+	annotations.sort(function(a, b) {
+    return a.start - b.start;
+});
+}
+
+function highlight_seq(annotations){
+	var previous = 0;
+	var arrayLength = annotations.length;
+
+	for (var i = 0; i < arrayLength; i++) {
+
+		var start = annotations[i].start;
+		var end = annotations[i].end;
+		var label = annotations[i].label;
+		var index = annotations[i].id.split('').pop();
+		
+		if (start < previous){
+			console.log("Skipping label "+label+" due to being inside another feature");
+			continue;
+		}
+		previous = end;
+
+		color = typeColorsSelected[index];
+
+		sequenceCoverage.push({
+		start:		start,
+		end:		end,
+		bgcolor:	color,
+		color:		"black",
+		underscore:	false   
+		});
+
+		legend.push(
+			{name: label, color: color, underscore: false}
+		);
+	}
+}
+
+function seqviewer(sequence, element) {
+	
 		seqViewer = new Sequence(sequence);
 		
 		seqViewer.render(element, {
 			'charsPerLine': 100,
-			'sequenceMaxHeight': "300px",
-			'title': name
+			'search': true,
+			'sequenceMaxHeight': "385px",
+			'title': "Gene"
 		});
 }
 
-function sites(sites, length, color){
-	if (typeof sequenceCoverage !== 'undefined') {
-	}
-	else{
-		sequenceCoverage = [];
-	}
-	if (sites.length > 0){
-		for (var i = 0; i < sites.length; i++){
+function draw(canvasName, annotation, sequence, type, name){
+	var canvas = document.getElementById(canvasName);
+	var arrayLength = annotations.length;
+	var track1 = "no";
+	var track2 = "no";
+	var track3 = "no";
 
-			sequenceCoverage.push({
-			start:		sites[i],
-			end:		sites[i]+length,
-			bgcolor:	color,
-			color:		"white",
-			underscore:	false   
-			});
-		}
-	}
-	else{
-			sequenceCoverage.push({
-			start:		0,
-			end:		0,
-			bgcolor:	"white",
-			color:		"black",
-			underscore:	false   
-			});
-	}
-}
+	geneView = new Scribl(canvas, 846);
+    geneView.glyph.color = "black";
+    geneView.glyph.text.size = 12;
+    geneView.glyph.text.font = "courier";
+    geneView.glyph.text.align = "center";
+	geneView.glyph.roundness = 10;
+    geneView.laneSizes = parseInt(20);
+	geneView.scale.font.size = 12;
+	geneView.scale.min = 25;
+	geneView.tick.auto = false;
+	geneView.scale.size = 10;
+	geneView.scale.font.size = 12;
+	geneView.scale.font.color = "black";
+	geneView.scale.font.size = 12;
+    geneView.trackBuffer = 10;
 
-function legende(name, color){
-		if (typeof legend !== 'undefined') {
+	if (sequence.length > 1000){
+		geneView.tick.major.size = Math.ceil(seq.length / 1000) * 250;
+		geneView.tick.minor.size = Math.ceil(seq.length / 1000) * 50;
+	}else if(sequence.length <= 1000 && sequence.length > 100){
+		geneView.tick.major.size = Math.ceil(seq.length / 100) * 50;
+		geneView.tick.minor.size = Math.ceil(seq.length / 100) * 10;
+	}else{
+		geneView.tick.major.size = Math.ceil(seq.length / 100) * 10;
+		geneView.tick.minor.size = Math.ceil(seq.length / 100) * 2;
 	}
-	else{
-		 legend = [];
-	}	
 	
-		 legend.push({
-			 name: name, color: color, underscore: false
-		 });
-}
-
-function add_legend(){
-	seqViewer.addLegend(legend);		
-					 }
-
-function highlight_sites(){
-	seqViewer.coverage(sequenceCoverage);
-}
-
-function recode(name, seq, newseq, type){	
-
-	if (type == "CDS" && seq.substring(0,3) == "ATG"){
-		if (typeof changed !== 'undefined'){
-
+	geneView.scale.max = Math.ceil(seq.length/geneView.tick.major.size) * geneView.tick.major.size;
+	
+	geneTrack0 = geneView.addTrack().addLane();
+	
+	for (var i = 0; i < arrayLength; i++) {
+		var length = annotations[i].end-annotations[i].start;
+		if (length >= 100){
+			var track1 = "yes"
 		}
-		else if(typeof changed == 'undefined'){
-			front = "GGTCTCAA";
-			back = "GCTTCGAGACC";
-			add=8;
+		else if (length < 100 && length >= 10){
+			var track2 = "yes"
+		}else{
+			var track3 = "yes"
 		}
 	}
-	else if (type == "CDS" && seq.substring(0,3) != "ATG"){
-		alert("cds does not start with ATG. Check sequence!")
+	
+	if (track1 == "yes"){
+		geneTrack1 = geneView.addTrack().addLane();
 	}
-	else if (type == 'promoter' && typeof changed == 'undefined'){
-			front = "GGTCTCAGGAG"
-			back = "CCATCGAGACC"
-			add=11;
+	if (track2 == "yes"){
+		geneTrack2 = geneView.addTrack().addLane();
 	}
-	else if (type == 'promoter' && typeof changed != 'undefined'){}
-	else if (type == 'terminator' && typeof changed == 'undefined'){
-			front = "GGTCTCAGCTT"
-			back = "CGCTTGAGACC"
-			add=11;
+	if (track3 == "yes"){
+		geneTrack3 = geneView.addTrack().addLane();
 	}
-	else if (type == 'terminator' && typeof changed != 'undefined'){}
+	
+	part = geneTrack0.addFeature(new Rect(type,0, sequence.length, '+'));
+	part.color="white";
+	part.borderColor="black";
+   	part.borderWidth = 2;
+	part.name = name+" - "+type;
+
+	
+	for (var i = 0; i < arrayLength; i++) {
+		var start = annotations[i].start;
+		var length = annotations[i].end-annotations[i].start;
+		var strand = annotations[i].strand;
+		var label = annotations[i].label;
+		var type = annotations[i].type;
+		var id = annotations[i].id;
+		var index = annotations[i].id.split('').pop();
+				
+		if (length >= 100){
+			newFeature = geneTrack1.addGene(start, length, strand, {'borderColor':'black'} );
+		}else if (length < 100 && length >= 10){
+			newFeature = geneTrack2.addGene(start, length, strand, {'borderColor':'black'} );
+		}else{
+			newFeature = geneTrack3.addGene(start, length, strand, {'borderColor':'black'} );
+		}
+				
+		onClick = function(feature){
+			selectedDBID = feature.dbid;
+			highlight_sel(feature, typeColorsSelected[feature.index]);
+		};
+
+		newFeature.onClick = onClick;
+		newFeature.type = type;
+		newFeature.index = index;
+		newFeature.dbid = id;
+		newFeature.name = label;
+
+		newFeature.onMouseover = function(feature){
+			for(i=0; i<features.length; i++){
+				if (features[i].uid == feature.uid || features[i].dbid == selectedDBID){
+					features[i].borderWidth = 5;
+				}
+				else{
+					features[i].borderWidth = 2;
+				}
+			}
+		geneView.redraw();
+		feature.addTooltip(feature.type);
+		};
+
+	features.push(newFeature);
+	}
+	canvas.height = geneView.getHeight() + 30;
+	geneView.draw();
+	draworig();
+}
+
+function draworig(){
+	for(i=0; i<features.length; i++){
+			features[i].setColorGradient( typeColorsSelected[features[i].index], typeColorsSelected[features[i].index]  );
+			if (features[i].dbid == selectedDBID){
+				features[i].borderWidth = 5;
+			}
+			else{
+				features[i].borderWidth = 2;
+			}
+	}
+	geneView.redraw();
+}
+
+function highlight_sel(element, color){
+
+	var sequenceCoverage = [];
+	// WARNING removed local variable definition! - RECODE
+	subSeq = "";
+	strand = element.strand
+	type = element.type
+	
+	var elStart, elEnd;
+	var pos, end;
+
+	if (element.strand == '+'){
+		elStart = element.position;
+		elEnd = element.position+element.length;
+	}
 	else{
-		console.log(type)
-		alert("Recode is for promoters, cdss and terminators")
-	}
-	newseq = front+newseq+back
-	recodedseq = newseq
-	recoder(newseq, '#seqView', name+" - Recoded");
-	delete sequenceCoverage;
-	delete legend;
-	var highlight = [0,newseq.length-6]
-	var overhangs = [7,newseq.length-11]
-	sites(highlight,6,"blue");
-	sites(overhangs,4,"red");
-	// WTF?
-	for (var i = 0; i < BsaI.length; i++){
-		sites([BsaI[i]+add],6,"green");
-	}
-	for (var i = 0; i < SapI.length; i++){
-		sites([SapI[i]+add],7,"green");
+		end = seq.length;
+		elStart = element.position;
+		elEnd = element.position+element.length;
 	}
 
-	legende("BsaI","blue");
-	legende("Old sites","green");
-	legende("Overhangs","red");
-	add_legend();
-	highlight_sites();
-	document.getElementById("message").innerHTML = "BsaI & SapI sites recoded, BsaI flanking sequences and overhangs added.";
+	sequenceCoverage.push({
+	start:		elStart,
+	end:		elEnd,
+	bgcolor:	color,
+	color:		"black",
+	underscore:	false   
+	});
+
+	subSeq = subSeq + seq.substring(elStart, elEnd);
+
+	seqViewer.coverage(sequenceCoverage);
 
 	var button = document.getElementById('clipboard_btn');
-	button.setAttribute('data-clipboard-text', recodedseq)
-
-					}
-  function change_overhangs(i) {
-    if (i == "N"){
-		changed ="yes";
-		front = "GGTCTCACC";
-		back = "AATGTGAGACC";
-		add=9;
-	}
-	else if (i == "C"){
-		changed ="yes";
-		front = "GGTCTCATTCG";
-		back = "GCTTTGAGACC";
-		add=11;
-   	}
-  	else if (i == "P"){
-		changed ="yes";
-		front = "GGTCTCAGGAG";
-		back = "TACTTGAGACC";
-		add=11;
-   	}
-  	else if (i == "T"){
-		changed ="yes";
-		front = "GGTCTCAGGTA";
-		back = "CGCTTGAGACC";
-		add=11;
-   	}
-   	else{ 
-		delete changed;
-   	}	  
-  }
-function export_GB(name, seqtype){
-	link = "/export?"+"seq="+recodedseq+"&type="+seqtype+"&name="+name
-	location.href=link;
+	button.setAttribute('data-clipboard-text', subSeq)
 }

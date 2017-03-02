@@ -14,8 +14,19 @@
 	</head>
 
 	<body>
-		
-		<h1 class="title"><a href="/">DNArchive v0.01a</a></h1> 
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<div id="flashMessage">
+					<ul>
+						{% for message in messages %}
+							<li class = "flashes">{{ message }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+		{% endwith %}
+
+		<h1 class="title"><a href="/">DNArchive v0.01a </a>{{title}}</h1> 
 						
 		{% block content %}
 		{% endblock %}

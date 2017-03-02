@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<h2 class="center">Upload a genbank file to DNArchive</h2><br />
+<h3 class="description">Please fill as much fields as you can, to ensure the quality of the database and search
+efficacy. Name and file are mandatory</h3>
+
+<form id="form" action="upload" class="center-form" method="POST" enctype="multipart/form-data">
+	
+	<label class="label" for="name">Name or alias*</label>
+	<input id="name" class="text-input" type="text"  name="name" onfocus="if (this.value == 'eGFP') { this.value = ''; }" value="{{name}}">
+	
+	<label class="label" for="type">Sequence type*</label>
+	<select id="type" class="selector" name="type">
+	{% if type|length==0 %}
+		<option value="">Sequence type</option>
+	{% else %}
+		<option value="{{type}}">{{type}}</option>
+	{% endif %}
+		<option value="CDS">CDS</option>
+		<option value="Promoter">Promoter</option>
+		<option value="Terminator">Terminator</option>
+		<option value="Repressor">Repressor</option>
+		<option value="Enhancer">Enhancer</option>
+		<option value="Resistance">Resistance</option>
+		<option value="ORI">ORI</option>
+		<option value="Box">Box</option>
+		<option value="Tag">Tag</option>
+		<option value="Other">Other</option>
+	</select>
+	<div style="clear: both;"></div>
+	
+	<label class="label" for="description">Description</label>
+	<div style="clear: both;"></div>
+	<input id="description" class="text-input long" type="text"  name="description" onfocus="if (this.value == 'Enhanced green fluorescent protein') { this.value = ''; }" value="{{description}}">
+	
+	<div style="clear: both;"></div>	
+	<label class="label" for="reference">Reference</label>
+	
+	<div style="clear: both;"></div>
+	<div style="clear: both;"></div>
+	<textarea id="reference" class="box ref" name="reference" type="text">{{reference}}</textarea>
+
+	<input id="custom-button" class="custom-file-input" type="file" name="file"/>
+	<input id="blast-button" class="button right" onclick="return check();" type="submit" value="Upload">
+	<label id="uploaded" class="lab hidden">File selected</label>
+</form>
+
+<script>
+	$(document).ready(function(){
+    	$("#custom-button").click(function(){
+			console.log("clicked");
+			$("#uploaded").css("display","block");
+    	})
+	
+		if ($("#name").val() == ""){
+			$("#name").val("eGFP")};
+		if ($("#description").val() == ""){
+			$("#description").val("Enhanced green fluorescent protein")};
+		
+		if ($("#reference").val() == ""){
+			$("#reference").val("Zhang, G., Gurtu, V., & Kain, S. R. (1996). An Enhanced Green Fluorescent Protein Allows Sensitive Detection of Gene Transfer in Mammalian Cells. Biochemical and Biophysical Research Communications, 227(3), 707–711. http://doi.org/10.1006/bbrc.1996.1573")}
+	});
+	
+	$("#reference").focus(function() {
+    if( $(this).val() == "Zhang, G., Gurtu, V., & Kain, S. R. (1996). An Enhanced Green Fluorescent Protein Allows Sensitive Detection of Gene Transfer in Mammalian Cells. Biochemical and Biophysical Research Communications, 227(3), 707–711. http://doi.org/10.1006/bbrc.1996.1573" ) {
+        $(this).val("");
+    }});
+	
+	function check(){
+		if($("#reference").val() == "Zhang, G., Gurtu, V., & Kain, S. R. (1996). An Enhanced Green Fluorescent Protein Allows Sensitive Detection of Gene Transfer in Mammalian Cells. Biochemical and Biophysical Research Communications, 227(3), 707–711. http://doi.org/10.1006/bbrc.1996.1573") {
+        	$("#reference").val("");
+    		}
+	  	return true;
+		};
+</script>
+
+{% endblock %}
+

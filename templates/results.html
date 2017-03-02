@@ -1,10 +1,38 @@
 {% extends "layout.html" %}
-{% block content %}
-<br />
-<h2 class="description">Results for your query</h2><br />
-<h3>{{query}}</h3>
-<h3>{{name}}</h3>
-<h3>{{sequenceID}}</h3>
-<h3>{{sequence}}</h3>
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+{% endblock %}
 
+{% block content %}
+<h2 class="center">Results for your query</h2><br />
+
+<div id="table" class="results-table-div">
+	
+	<table class="results_table">
+			<tr class="theader">
+				<th class="theader">Name</th>
+				<th class="theader">Description</th>
+				<th class="theader">Seq. type</th>
+				<th class="theader">Seq. length</th>
+				<th class="theader">Score (/5)</th>
+				<th class="theader">Reference</th>
+			</tr>
+		{% for item in table %}
+		<tr>
+			<td><a href="/details?dbid={{item.dbid}}">{{item.name}}</a></td>
+			<td>{{item.description}}</td>
+			<td>{{item.type}}</td>
+			<td>{{item.seq | length}}</td>
+			<td>{{((item.score+0.1)/(item.votes+0.1))|round(1,'ceil')}}</td>
+			<td>{{item.reference | truncate(40)}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+<br /><br /><br />
+<script>
+	$(document).ready(function(){
+			$(".footer").css("position","relative")
+    	});
+</script>
 {% endblock %}
