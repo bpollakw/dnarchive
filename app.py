@@ -19,19 +19,15 @@ from Bio.Alphabet import IUPAC
 from werkzeug import secure_filename
 
 app = Flask(__name__, static_url_path="", static_folder="static")
-app.secret_key = '73234adae4dd527740b123211473c356b1df1d577e007b90'
+app.debug = True
+
+app.secret_key = '4c3b5bdbdbac4a680098151f6087a49e81dfc7a4da01a27a'
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['ape','gb','gbk'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///userdb"
-#app.debug = True
-
-#urlparse.uses_netloc.append("postgres")
-
-partsdb = PartsDB('postgres://tvusrllhctxxun:97a13d0760c9474886c1416562962de907a55c71d9e4ad808900a7d42de9d43f@ec2-23-21-186-138.compute-1.amazonaws.com:5432/d95spg1g38de45', clean = False, Base = Base) 
-# PartsDB('postgresql:///dnarchive', clean = False, Base = Base)
+partsdb = PartsDB('postgresql:///dnarchive', clean = False, Base = Base)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
