@@ -4,7 +4,6 @@ from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, CompoundLocation, FeatureLocation
 import sys
 
-## I should do something about Ape colors in qualifiers...
 class Annotator:
 	def __init__(self, cls):
 		self.cls = cls
