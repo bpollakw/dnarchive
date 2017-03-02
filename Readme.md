@@ -1,3 +1,5 @@
+www.dnarchive.info
+
 # DNArchive - The community curated DNA archive - v0.01 alpha
 
 A DNA sequence repository for easy, open-access and community based curation.
