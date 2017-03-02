@@ -20,7 +20,7 @@
 
 {% block content %}
 
-<h2 class="center">Sequence <a href="/details?dbid={{data.dbid}}">{{data.name}}</a> type - {{data.type}}</h2><br />
+<h2 class="center"><a href="/details?dbid={{data.dbid}}">{{data.type}} - {{data.name}}</a> sequence.</h2><br />
 <h3 class="description"><u>Description:</u> {{data.description}}.</h3> 
 <h4 class="description">Features: {% for annotation in annotations %}{{ annotation.label }} {% endfor %}</h4>
 <br />
