@@ -36,6 +36,7 @@ createdb dnarchive
 - Flask-Sessions - https://pythonhosted.org/Flask-Session/
 - Jinja2 - http://jinja.pocoo.org
 - waitress - http://docs.pylonsproject.org/projects/waitress/en/latest/
+- psycopg2 - http://initd.org/psycopg/
 
 Install through the requirements.txt file in the root of dnarchive git clone.
 
