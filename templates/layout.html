@@ -14,26 +14,31 @@
 	</head>
 
 	<body>
-		{% with messages = get_flashed_messages() %}
-			{% if messages %}
-				<div id="flashMessage">
-					<ul>
-						{% for message in messages %}
-							<li class = "flashes">{{ message }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
-		{% endwith %}
+		<div class="content">
+			<div class="content-inner">
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					<div id="flashMessage">
+						<ul>
+							{% for message in messages %}
+								<li class = "flashes">{{ message }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endwith %}
 
-		<h1 class="title"><a href="/">DNArchive v0.01a </a>{{title}}</h1> 
-						
-		{% block content %}
-		{% endblock %}
+			<div class="container">
+				<h1 class="title"><a href="/">DNArchive v0.01a </a>{{title}}</h1> 
 
-		{% block footer %}
-			{% include "footer.html" %}
-		{% endblock %}
-
+				{% block content %}
+				{% endblock %}
+				<div class="push"></div>
+			</div>
+			{% block footer %}
+				{% include "footer.html" %}
+			{% endblock %}
+			</div>
+		</div>
 	</body>	
 </html>

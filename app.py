@@ -9,7 +9,6 @@ import collections
 from flask import Flask, session, redirect, url_for, escape, request, render_template, make_response, flash, jsonify, abort, Markup
 import urlparse
 from sqlalchemy import or_
-import hashlib
 	
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -19,9 +18,7 @@ from Bio.Alphabet import IUPAC
 from werkzeug import secure_filename
 
 app = Flask(__name__, static_url_path="", static_folder="static")
-app.debug = True
-
-app.secret_key = '4c3b5bdbdbac4a680098151f6087a49e81dfc7a4da01a27a'
+app.secret_key = '375bf8a3e9f198dc3004eeab423bcb73b574cd0aa4159b17'
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['ape','gb','gbk'])
@@ -320,5 +317,5 @@ if __name__ == "__main__":
  	port = int(os.environ.get('PORT', 5000))	
 	serve(app, host="0.0.0.0", port=port)
 	
-	#serve(wsgiapp, listen='*:8080')  
+	# For debug
 	#app.run(debug=True, host="0.0.0.0", port=5000)

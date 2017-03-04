@@ -26,7 +26,6 @@
 <br />
 <h4 class="description">Feel free to rate the sequence/annotations. Even if you are not completely certain, substantial collective rating will undoubtedly improve the quality of the accessions. Strength in <u>numbers!</u></h4>
 
-
 <label id="voted" class="label alert"></label>
 <div class="rating-container">
 	<ul class="c-rating right"></ul>
@@ -50,13 +49,13 @@
 </div>
 
 <h4 class="description"><u>Reference:</u> {{data.reference}}</h4>
-<br /><br />
+<div style="clear: both;"></div>
+<br />
 <script>
-	
-	init_rating();
+
 	$(document).ready(function(){
-		$(".footer").css("position","relative")
-		
+		init_rating();
+
 		var clipboard = new Clipboard('#clipboard_btn')
 		$("#clipboard_btn").mouseleave(function(){
 				$(this).removeClass('tooltipped');

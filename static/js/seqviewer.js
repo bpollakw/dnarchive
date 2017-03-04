@@ -22,6 +22,9 @@ legend = [];
 annotations = [];
 var features = []
 
+function sanitise(string) {
+    return string.replace(/&#39;/g, "'");
+ }
 
 function parse_annotation(location, label, type, id){
 	var res = location.split(";");
@@ -105,9 +108,10 @@ function draw(canvasName, annotation, sequence, type, name){
 	geneView = new Scribl(canvas, 846);
     geneView.glyph.color = "black";
     geneView.glyph.text.size = 12;
-    geneView.glyph.text.font = "courier";
+    geneView.glyph.text.font = "Arial";
     geneView.glyph.text.align = "center";
 	geneView.glyph.roundness = 10;
+	geneView.tooltips.style = "dark";
     geneView.laneSizes = parseInt(20);
 	geneView.scale.font.size = 12;
 	geneView.scale.min = 25;
@@ -164,12 +168,12 @@ function draw(canvasName, annotation, sequence, type, name){
    	part.borderWidth = 2;
 	part.name = type+" - "+name;
 
-	
+	console.log(arrayLength)
 	for (var i = 0; i < arrayLength; i++) {
 		var start = annotations[i].start;
 		var length = annotations[i].end-annotations[i].start;
 		var strand = annotations[i].strand;
-		var label = annotations[i].label;
+		var label = sanitise(annotations[i].label);
 		var type = annotations[i].type;
 		var id = annotations[i].id;
 		var index = annotations[i].id.split('').pop();
@@ -191,8 +195,14 @@ function draw(canvasName, annotation, sequence, type, name){
 		newFeature.type = type;
 		newFeature.index = index;
 		newFeature.dbid = id;
-		newFeature.name = label;
-
+		newFeature.label = label;
+		
+		if (length/seq.length < label.length/100){
+			newFeature.name = ""	
+		}else{
+			newFeature.name = label.split(" ")[0];
+		}
+		
 		newFeature.onMouseover = function(feature){
 			for(i=0; i<features.length; i++){
 				if (features[i].uid == feature.uid || features[i].dbid == selectedDBID){
@@ -203,9 +213,9 @@ function draw(canvasName, annotation, sequence, type, name){
 				}
 			}
 		geneView.redraw();
-		feature.addTooltip(feature.type);
+		feature.addTooltip(feature.type+" - "+feature.label, 'above', 4);
 		};
-
+	console.log(newFeature)
 	features.push(newFeature);
 	}
 	canvas.height = geneView.getHeight() + 30;

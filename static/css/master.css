@@ -17,12 +17,17 @@
 	box-sizing: border-box;
 }
 
+}
+html, body {
+    height: 100%;
+}
+
 body{
 	position: relative;
 	width: auto !important; 
 	height: 100%;
 	margin:0;
-	min-width: 1000px;
+	min-width: 1000px !important;
 }
 
 input.text-input{
@@ -124,7 +129,6 @@ a {
 	width: 68%;
 }
 .search-form{
-	position: relative;
 	margin-top: 20px;
 	margin-left: auto;
 	margin-right: auto;
@@ -167,10 +171,6 @@ a {
 
 /* Layout */
 
-.container{
-	padding-top: 40px;
-	position: relative;
-}
 
 .description{
 	width: 68%;
@@ -184,11 +184,21 @@ a {
 	height: 100%;
 }
 
+
+
 .content-inner{
 	position: relative;
 	height: 100%;
 }
 
+.container{
+    height: auto !important;
+    height: 100%;
+	min-height: 100%;
+    margin: 0 auto -60px; /* the bottom margin */
+	padding-top: 40px;
+	position: relative;
+}
 
 /* Header */
 
@@ -354,7 +364,6 @@ table{
 	margin-right: auto;
 	width: 85%;
 	position: relative;
-	min-height: 480px;
 }
 .results_table{
 	border-bottom: solid 1.5px black;
@@ -407,16 +416,15 @@ td {
 	font-size: 14px;
 	color: firebrick;
 }
-
-
+.push {
+    height: 60px; /* .push must be the same height as .footer */
+}
 .footer{
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
 	height: 60px;
 	background-color: #111;
 	color:white;
 	padding: 5px;
+	width: 100%;
 }
 
 .footer a{
@@ -482,11 +490,6 @@ td {
 	margin-top: 15px;
 }
 
-#star_img{
-	height: 30px;
-	width: 30px;
-	margin-top: -6px;
-}
 
 /* -----------------------------------------------------------------------------
   COMPENENTS - RATING
