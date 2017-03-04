@@ -51,7 +51,7 @@ This git already contains a generated secret_key for the Flask app, but you migh
 cd src
 python secret_key.py
 ```
-Copy the secret key onto `app.secret_key = '73234adae4dd527740b123211473c356b1df1d577e007b90'` in app.py.
+Copy the secret key onto `app.secret_key = '375bf8a3e9f198dc3004eeab423bcb73b574cd0aa4159b17'` in app.py.
 
 Then replace the database name in `partsdb = PartsDB('postgresql:///dnarchive', clean = False, Base = Base)` where dnarchive is.
 
