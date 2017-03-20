@@ -263,6 +263,10 @@ def export():
 	description = query.description
 	type = query.type
 	
+	
+	if len(name)>16:
+		name = name[0:16]
+	
 	colours = ['69D2E7','A7DBD8','ffff99','FA6900','C02942','53777A','F8CA00','8A9B0F','C6A49A','C6E5D9']
 	
 	record = SeqRecord( Seq( seq, IUPAC.unambiguous_dna ), name = name, description = description, id=dbid, dbxrefs=[str(dbid),"DNArchive"])
